@@ -3,7 +3,7 @@
 > Public Key authentication strategy for feathers-authentication using Passport without all the boilerplate.
 
 The Public Key used in this repo is a Ethereum public key. The encryption and signature verification are done
-using (web3)[https://github.com/ethereum/web3.js] and (ethereumjs-util)[https://github.com/ethereumjs/ethereumjs-util].
+using [web3](https://github.com/ethereum/web3.js) and [ethereumjs-util](https://github.com/ethereumjs/ethereumjs-util).
 
 ## Installation
 
@@ -61,7 +61,7 @@ It has the following methods that can all be overridden. All methods return a pr
     constructor(app, options) // the class constructor
     _verifySignature(entity, signature) // verifies signature using ecrecover
     _normalizeResult(result) // normalizes result from service to account for pagination
-    verify(req, username, password, done) // queries the service and calls the other internal functions.
+    verify(req, findByValue, signature, done) // queries the service and calls the other internal functions.
 }
 ```
 
@@ -97,7 +97,7 @@ by the value of findBy.
 ```js
 {
   strategy: 'publicKey',
-  email: '<email>', // or nonce: 'nonce', or some other field
+  email: '<email>', // or nonce: '<nonce>', or some other field defined by findBy
   signature: '<long_token>'
 }
 ```
