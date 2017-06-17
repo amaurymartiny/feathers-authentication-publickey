@@ -20,7 +20,9 @@ app.configure(rest())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  .configure(publicKey())
+  .configure(publicKey({
+    findBy: 'email' // Replace here what you want to find the user by. This field must be in the request sent for the authentication.
+  }))
   .configure(jwt())
   .use('/users', memory())
   .use(errorHandler());
@@ -41,6 +43,8 @@ app.service('authentication').hooks({
 const User = {
   email: 'admin@feathersjs.com',
   password: 'admin',
+  publicKey: '0xBf42a5519CD65416E743b7E52477288178469AEC',
+  nonce: 516958191, // Randomly generated number
   permissions: ['*']
 };
 
