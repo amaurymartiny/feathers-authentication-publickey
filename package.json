@@ -52,7 +52,7 @@
   "dependencies": {
     "debug": "^2.6.8",
     "feathers-errors": "^2.8.1",
-    "passport-publickey": "^1.0.3"
+    "passport-publickey": "amaurymartiny/passport-publickey"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

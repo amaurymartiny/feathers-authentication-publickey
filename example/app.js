@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const errorHandler = require('feathers-errors/handler');
 const auth = require('feathers-authentication');
 const jwt = require('feathers-authentication-jwt');
-const local = require('../lib/index');
+const publicKey = require('../lib/index');
 
 // Initialize the application
 const app = feathers();
@@ -20,7 +20,7 @@ app.configure(rest())
   .use(bodyParser.urlencoded({ extended: true }))
   // Configure feathers-authentication
   .configure(auth({ secret: 'super secret' }))
-  .configure(local())
+  .configure(publicKey())
   .configure(jwt())
   .use('/users', memory())
   .use(errorHandler());
@@ -37,15 +37,6 @@ app.service('authentication').hooks({
   }
 });
 
-// Add a hook to the user service that automatically replaces
-// the password with a hash of the password before saving it.
-app.service('users').hooks({
-  before: {
-    get: auth.hooks.authenticate('jwt'),
-    create: local.hooks.hashPassword()
-  }
-});
-
 // Create a user that we can use to log in
 const User = {
   email: 'admin@feathersjs.com',
@@ -59,4 +50,4 @@ app.service('users').create(User).then(user => {
 
 app.listen(3030);
 
-console.log('Feathers authentication with local auth started on 127.0.0.1:3030');
+console.log('Feathers authentication with publicKey auth started on 127.0.0.1:3030');
