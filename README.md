@@ -2,7 +2,7 @@
 
 > Public Key authentication strategy for feathers-authentication using Passport without all the boilerplate.
 
-The Public Key used in this repo is a Ethereum public key. The default behavior is an Ethereum public key, the encryption and signature verification are done using [web3](https://github.com/ethereum/web3.js) and [ethereumjs-util](https://github.com/ethereumjs/ethereumjs-util). This behavior can of course be overwritten (see Customizing the Verifier).
+The Public Key used in this repo is a Ethereum public key. The encryption and signature verification are done using [web3](https://github.com/ethereum/web3.js) and [ethereumjs-util](https://github.com/ethereumjs/ethereumjs-util). You can of course use any Public Key and signature verification algorithm want (see Customizing the Verifier).
 
 ## Installation
 
