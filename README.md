@@ -2,8 +2,7 @@
 
 > Public Key authentication strategy for feathers-authentication using Passport without all the boilerplate.
 
-The Public Key used in this repo is a Ethereum public key. The encryption and signature verification are done
-using [web3](https://github.com/ethereum/web3.js) and [ethereumjs-util](https://github.com/ethereumjs/ethereumjs-util).
+The Public Key used in this repo is a Ethereum public key. The default behavior is an Ethereum public key, the encryption and signature verification are done using [web3](https://github.com/ethereum/web3.js) and [ethereumjs-util](https://github.com/ethereumjs/ethereumjs-util). This behavior can of course be overwritten (see Customizing the Verifier).
 
 ## Installation
 
@@ -42,7 +41,6 @@ This will pull from your global `auth` object in your config file. It will also 
     service: 'users', // the service to look up the entity
     in: 'body', // does the data lie in req.body or req.headers?
     findBy: 'id', // field to uniquely find the user in the database. This field should be present in the request
-    passwordField: 'password', // key name of password field
     passReqToCallback: true, // whether the request object should be passed to `verify`
     Verifier: Verifier // A Verifier class. Defaults to the built-in one but can be a custom one. See below for details.
 }
