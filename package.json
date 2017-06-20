@@ -1,7 +1,7 @@
 {
   "name": "feathers-authentication-publickey",
   "description": "Public Key authentication strategy for feathers-authentication",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/amaurymartiny/feathers-authentication-publickey",
   "main": "lib/",
   "keywords": [
