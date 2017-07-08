@@ -9,7 +9,8 @@ const defaults = {
   entity: 'user',
   service: 'users',
   findBy: 'id',
-  in: 'body'
+  in: 'body',
+  passReqToCallback: true,
 };
 
 export default function init(options = {}) {
@@ -50,3 +51,10 @@ export default function init(options = {}) {
     }
   };
 }
+
+// Exposed Modules
+Object.assign(init, {
+  defaults,
+  hooks,
+  Verifier: DefaultVerifier
+});
