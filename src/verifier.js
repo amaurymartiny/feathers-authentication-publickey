@@ -21,12 +21,12 @@ class PublicKeyVerifier {
   }
 
   _verifySignature(entity, signature) {
-    if (!entity.nonce) {
-      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a 'nonce' field`)
+    if (!entity[this.options.nonceField]) {
+      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '`${[this.options.nonceField]}`' field`)
     }
 
-    if (!entity.publicKey) {
-      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a 'publicKey' field`)
+    if (!entity[this.options.publicKeyField]) {
+      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '`[this.options.nonceField]`' field`)
     }
 
     debug('Verifying signature');
@@ -44,7 +44,7 @@ class PublicKeyVerifier {
     const pub = utils.ecrecover(m, v, r, s);
     const adr = '0x' + utils.pubToAddress(pub).toString('hex');
 
-    if (adr === entity.publicKey.toLowerCase()) {
+    if (adr === entity[this.options.publicKeyField].toLowerCase()) {
       return Promise.resolve(entity);
     } else {
       return Promise.reject(new errors.NotAuthenticated('Signature verification failed'));

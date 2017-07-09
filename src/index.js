@@ -5,12 +5,14 @@ import { Strategy as publicKeyStrategy } from 'passport-publickey';
 
 const debug = Debug('feathers-authentication-publickey');
 const defaults = {
-  name: 'publicKey',
-  entity: 'user',
-  service: 'users',
-  findBy: 'id',
-  in: 'body',
-  passReqToCallback: true,
+  name: 'publicKey', // Name of this auth for feathers-authentication
+  entity: 'user', // Entity to look in the DB
+  service: 'users', // Service to call in your feathers app
+  findBy: 'id', // Field to uniquely find the user by
+  in: 'body', // Where in the request is the data? request.body, request.headers, request.params...
+  publicKeyField: 'publicKey', // Field in the entity model for publicKey
+  nonceField: 'nonce', // Field in the entity model for nonce
+  passReqToCallback: false, // See passport strategy
 };
 
 export default function init(options = {}) {
@@ -46,7 +48,7 @@ export default function init(options = {}) {
       debug('Registering publicKey authentication strategy with options:', publicKeySettings);
       app.passport.use(publicKeySettings.name, new publicKeyStrategy(publicKeySettings, verifier.verify.bind(verifier)));
       app.passport.options(publicKeySettings.name, publicKeySettings);
-      
+
       return result;
     }
   };
