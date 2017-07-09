@@ -22,11 +22,11 @@ class PublicKeyVerifier {
 
   _verifySignature(entity, signature) {
     if (!entity[this.options.nonceField]) {
-      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '`${[this.options.nonceField]}`' field`)
+      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '${this.options.nonceField}' field`)
     }
 
     if (!entity[this.options.publicKeyField]) {
-      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '`[this.options.nonceField]`' field`)
+      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '${this.options.nonceField}' field`)
     }
 
     debug('Verifying signature');
