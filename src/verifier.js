@@ -26,7 +26,7 @@ class PublicKeyVerifier {
     }
 
     if (!entity[this.options.publicKeyField]) {
-      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '${this.options.nonceField}' field`)
+      throw new errors.BadRequest(`'${this.options.entity}' record in the database is missing a '${this.options.publicKeyField}' field`)
     }
 
     debug('Verifying signature');
