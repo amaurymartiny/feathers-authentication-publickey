@@ -9,7 +9,7 @@ describe('integration', () => {
   it('verifies', () => {
     const User = {
       publicKey: '0x0b664ebf14e204cde96690461830e0dd5dfb22aa',
-      nonce: 100,
+      nonce: 100
     };
 
     // Message '100' signed by 0x0b664ebf14e204cde96690461830e0dd5dfb22aa: web3.eth.sign('0x0b664ebf14e204cde96690461830e0dd5dfb22aa', '100');
@@ -19,7 +19,7 @@ describe('integration', () => {
       query: {},
       body: {
         id: 0,
-        signature: correctSignature,
+        signature: correctSignature
       },
       headers: {},
       cookies: {},
@@ -47,7 +47,7 @@ describe('integration', () => {
         find: (hook) => {
           paramsReceived = Object.keys(hook.params);
           dataReceived = hook.params.data;
-        },
+        }
       }
     });
 

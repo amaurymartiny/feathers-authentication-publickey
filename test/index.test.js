@@ -48,7 +48,7 @@ describe('feathers-authentication-publickey', () => {
       app.configure(publicKey());
       app.setup();
 
-      expect(passportPublicKey.Strategy).to.have.been.calledOnce;
+      expect(passportPublicKey.Strategy).to.have.been.calledOnce; // eslint-disable-line
       expect(app.passport.use).to.have.been.calledWith('publicKey');
 
       app.passport.use.restore();
@@ -60,7 +60,7 @@ describe('feathers-authentication-publickey', () => {
       app.configure(publicKey());
       app.setup();
 
-      expect(app.passport.options).to.have.been.calledOnce;
+      expect(app.passport.options).to.have.been.calledOnce; // eslint-disable-line
 
       app.passport.options.restore();
     });

@@ -76,9 +76,7 @@ describe('Verifier', () => {
 
     describe('when service is undefined', () => {
       it('throws an error', () => {
-        expect(() => {
-          new Verifier(app, {});
-        }).to.throw();
+        expect(() => new Verifier(app, {})).to.throw();
       });
     });
   });
@@ -169,7 +167,7 @@ describe('Verifier', () => {
     it('calls find on the provided service', done => {
       verifier.verify({}, user.id, correctSignature, () => {
         const query = { id: user.id, $limit: 1 };
-        expect(service.find).to.have.been.calledOnce;
+        expect(service.find).to.have.been.calledOnce; // eslint-disable-line
         expect(service.find).to.have.been.calledWith({ query });
         done();
       });
@@ -214,7 +212,7 @@ describe('Verifier', () => {
     it('calls _normalizeResult', done => {
       sinon.spy(verifier, '_normalizeResult');
       verifier.verify({}, user.id, correctSignature, () => {
-        expect(verifier._normalizeResult).to.have.been.calledOnce;
+        expect(verifier._normalizeResult).to.have.been.calledOnce; // eslint-disable-line
         verifier._normalizeResult.restore();
         done();
       });
@@ -222,6 +220,7 @@ describe('Verifier', () => {
 
     it('produces an error message when the user did not exist', done => {
       verifier.verify({}, 2, correctSignature, (err, user, info) => {
+        expect(err).to.equal(null);
         expect(info.message).to.equal('Signature verification failed');
         done();
       });
@@ -230,7 +229,7 @@ describe('Verifier', () => {
     it('calls _verifySignature', done => {
       sinon.spy(verifier, '_verifySignature');
       verifier.verify({}, user.id, correctSignature, () => {
-        expect(verifier._verifySignature).to.have.been.calledOnce;
+        expect(verifier._verifySignature).to.have.been.calledOnce; // eslint-disable-line
         verifier._verifySignature.restore();
         done();
       });
@@ -245,7 +244,7 @@ describe('Verifier', () => {
     });
 
     it('handles false rejections in promise chain', (done) => {
-      verifier._normalizeResult = () => Promise.reject(false);
+      verifier._normalizeResult = () => Promise.reject(false); // eslint-disable-line
       verifier.verify({}, user.email, 'admin', (error, entity) => {
         expect(error).to.equal(null);
         expect(entity).to.equal(false);
@@ -278,7 +277,6 @@ describe('Verifier without service.id', function () {
   let app;
   let options;
   let verifier;
-  let user;
 
   beforeEach(() => {
     app = feathers();
