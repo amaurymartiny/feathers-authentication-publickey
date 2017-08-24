@@ -56,8 +56,6 @@ describe('Verifier', () => {
     expect(typeof Verifier).to.equal('function');
   });
 
-
-
   describe('constructor', () => {
     it('retains an app reference', () => {
       expect(verifier.app).to.deep.equal(app);
@@ -104,7 +102,7 @@ describe('Verifier', () => {
       });
     });
 
-    describe('signature verification fails', () => {
+    describe('when invalid signature is given', () => {
       it('rejects with with a 401 error', () => {
         return verifier._verifySignature(user, 'invalid').catch(error => {
           expect(error).to.include({
@@ -116,7 +114,19 @@ describe('Verifier', () => {
       });
     });
 
-    describe('password comparison succeeds', () => {
+    describe('when signature/publicKey combination is wrong', () => {
+      it('rejects with with a 401 error', () => {
+        return verifier._verifySignature(Object.assign({}, user, { publicKey: '0x123' }), correctSignature).catch(error => {
+          expect(error).to.include({
+            name: 'NotAuthenticated',
+            code: 401,
+            message: 'Signature verification failed'
+          });
+        });
+      });
+    });
+
+    describe('when signature verification succeeds', () => {
       it('returns the entity', () => {
         return verifier._verifySignature(user, correctSignature).then(result => {
           expect(result).to.deep.equal(user);
@@ -174,7 +184,7 @@ describe('Verifier', () => {
         expect(error).to.equal(null);
         expect(entity).to.deep.equal(user);
         done();
-      })
+      });
     });
 
     it('allows overriding of nonceField', done => {
@@ -186,7 +196,7 @@ describe('Verifier', () => {
         expect(error).to.equal(null);
         expect(entity).to.deep.equal(user);
         done();
-      })
+      });
     });
 
     it('allows overriding of findBy', done => {
@@ -198,7 +208,7 @@ describe('Verifier', () => {
         expect(error).to.equal(null);
         expect(entity).to.deep.equal(user);
         done();
-      })
+      });
     });
 
     it('calls _normalizeResult', done => {
@@ -257,11 +267,9 @@ describe('Verifier', () => {
   describe('Verifier without service.id', function () {
     before(() => {
       service = {
-        find() {}
+        find () {}
       };
-
-
-    })
+    });
   });
 });
 
