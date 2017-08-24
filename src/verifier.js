@@ -2,6 +2,7 @@ import Debug from 'debug';
 import errors from 'feathers-errors';
 import Web3 from 'web3';
 import utils from 'ethereumjs-util';
+import omit from 'lodash.omit';
 
 const debug = Debug('feathers-authentication-publickey:verify');
 
@@ -75,10 +76,12 @@ class PublicKeyVerifier {
   verify(req, findByValue, signature, done) {
     debug('Checking credentials', findByValue, signature);
     const id = this.service.id;
-    const query = {
-      [this.options.findBy]: findByValue,
-      $limit: 1
-    };
+    const params = Object.assign({
+      query: {
+        [this.options.findBy]: findByValue,
+        $limit: 1
+      }
+    }, omit(req.params, 'query', 'provider', 'headers', 'session', 'cookies'));
 
     if (id === null || id === undefined) {
       debug('failed: the service.id was not set');
@@ -86,7 +89,7 @@ class PublicKeyVerifier {
     }
 
     // Look up the entity
-    this.service.find({ query })
+    this.service.find(params)
       .then(this._normalizeResult)
       .then(entity => this._verifySignature(entity, signature))
       .then(entity => {
