@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import hooks from './hooks';
 import DefaultVerifier from './verifier';
-import { Strategy as publicKeyStrategy } from 'passport-publickey';
+import { Strategy as PublicKeyStrategy } from 'passport-publickey';
 
 const debug = Debug('feathers-authentication-publickey');
 const defaults = {
@@ -25,11 +25,11 @@ export default function init(options = {}) {
     }
 
     let name = options.name || defaults.name;
-    let authOptions = app.get('auth') || {};
+    let authOptions = app.get('authentication') || {};
     let publicKeyOptions = authOptions[name] || {};
 
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    const publicKeySettings = Object.assign(defaults, publicKeyOptions, options);
+    const publicKeySettings = Object.assign({}, defaults, publicKeyOptions, options);
     let Verifier = DefaultVerifier;
 
     if (options.Verifier) {
@@ -46,7 +46,7 @@ export default function init(options = {}) {
 
       // Register 'publicKey' strategy with passport
       debug('Registering publicKey authentication strategy with options:', publicKeySettings);
-      app.passport.use(publicKeySettings.name, new publicKeyStrategy(publicKeySettings, verifier.verify.bind(verifier)));
+      app.passport.use(publicKeySettings.name, new PublicKeyStrategy(publicKeySettings, verifier.verify.bind(verifier)));
       app.passport.options(publicKeySettings.name, publicKeySettings);
 
       return result;
