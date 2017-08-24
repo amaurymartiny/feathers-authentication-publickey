@@ -12,7 +12,7 @@ const defaults = {
   in: 'body', // Where in the request is the data? request.body, request.headers, request.params...
   publicKeyField: 'publicKey', // Field in the entity model for publicKey
   nonceField: 'nonce', // Field in the entity model for nonce
-  passReqToCallback: false, // See passport strategy
+  passReqToCallback: true, // See passport strategy
 };
 
 export default function init(options = {}) {
