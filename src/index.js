@@ -13,6 +13,7 @@ const defaults = {
   publicKeyField: 'publicKey', // Field in the entity model for publicKey
   nonceField: 'nonce', // Field in the entity model for nonce
   passReqToCallback: true, // See passport strategy
+  session: false // whether to use sessions
 };
 
 export default function init(options = {}) {

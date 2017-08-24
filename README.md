@@ -41,6 +41,9 @@ This will pull from your global `auth` object in your config file. It will also 
     service: 'users', // the service to look up the entity
     in: 'body', // does the data lie in req.body or req.headers?
     findBy: 'id', // field to uniquely find the user in the database. This field should be present in the request
+    publicKeyField: 'publicKey', // Field in the entity model for publicKey
+    nonceField: 'nonce', // Field in the entity model for nonce
+    session: false // whether to use sessions
     passReqToCallback: true, // whether the request object should be passed to `verify`
     Verifier: Verifier // A Verifier class. Defaults to the built-in one but can be a custom one. See below for details.
 }
