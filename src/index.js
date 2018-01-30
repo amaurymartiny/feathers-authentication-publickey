@@ -22,7 +22,9 @@ export default function init(options = {}) {
     const _super = app.setup;
 
     if (!app.passport) {
-      throw new Error(`Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-publickey?`);
+      throw new Error(
+        `Can not find app.passport. Did you initialize feathers-authentication before feathers-authentication-publickey?`
+      );
     }
 
     let name = options.name || defaults.name;
@@ -30,28 +32,41 @@ export default function init(options = {}) {
     let publicKeyOptions = authOptions[name] || {};
 
     // NOTE (EK): Pull from global auth config to support legacy auth for an easier transition.
-    const publicKeySettings = Object.assign({}, defaults, publicKeyOptions, options);
+    const publicKeySettings = Object.assign(
+      {},
+      defaults,
+      publicKeyOptions,
+      options
+    );
     let Verifier = DefaultVerifier;
 
     if (options.Verifier) {
       Verifier = options.Verifier;
     }
 
-    app.setup = function () {
+    app.setup = function() {
       let result = _super.apply(this, arguments);
       let verifier = new Verifier(app, publicKeySettings);
 
       if (!verifier.verify) {
-        throw new Error(`Your verifier must implement a 'verify' function. It should have the same signature as a publicKey passport verify callback.`)
+        throw new Error(
+          `Your verifier must implement a 'verify' function. It should have the same signature as a publicKey passport verify callback.`
+        );
       }
 
       // Register 'publicKey' strategy with passport
-      debug('Registering publicKey authentication strategy with options:', publicKeySettings);
-      app.passport.use(publicKeySettings.name, new PublicKeyStrategy(publicKeySettings, verifier.verify.bind(verifier)));
+      debug(
+        'Registering publicKey authentication strategy with options:',
+        publicKeySettings
+      );
+      app.passport.use(
+        publicKeySettings.name,
+        new PublicKeyStrategy(publicKeySettings, verifier.verify.bind(verifier))
+      );
       app.passport.options(publicKeySettings.name, publicKeySettings);
 
       return result;
-    }
+    };
   };
 }
 
