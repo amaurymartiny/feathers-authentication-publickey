@@ -137,8 +137,12 @@ describe('feathers-authentication-publickey', () => {
       app.configure(publicKey());
       app.setup();
 
-      expect(passportPublicKey.Strategy.getCall(0).args[0].findBy).to.equal('email');
-      expect(passportPublicKey.Strategy.getCall(0).args[0].publicKeyField).to.equal('publicKey');
+      expect(passportPublicKey.Strategy.getCall(0).args[0].findBy).to.equal(
+        'email'
+      );
+      expect(
+        passportPublicKey.Strategy.getCall(0).args[0].publicKeyField
+      ).to.equal('publicKey');
 
       passportPublicKey.Strategy.restore();
     });
@@ -152,8 +156,12 @@ describe('feathers-authentication-publickey', () => {
       app.configure(publicKey({ name: 'custom' }));
       app.setup();
 
-      expect(passportPublicKey.Strategy.getCall(0).args[0].findBy).to.equal('email');
-      expect(passportPublicKey.Strategy.getCall(0).args[0].publicKeyField).to.equal('publicKey');
+      expect(passportPublicKey.Strategy.getCall(0).args[0].findBy).to.equal(
+        'email'
+      );
+      expect(
+        passportPublicKey.Strategy.getCall(0).args[0].publicKeyField
+      ).to.equal('publicKey');
 
       passportPublicKey.Strategy.restore();
     });
@@ -162,7 +170,7 @@ describe('feathers-authentication-publickey', () => {
       it('throws an error if a verify function is missing', () => {
         expect(() => {
           class CustomVerifier {
-            constructor (app) {
+            constructor(app) {
               this.app = app;
             }
           }
@@ -189,7 +197,7 @@ describe('feathers-authentication-publickey', () => {
           cookies: {}
         };
         class CustomVerifier extends Verifier {
-          verify (req, id, signature, done) {
+          verify(req, id, signature, done) {
             expect(id).to.equal(User.id);
             expect(signature).to.equal(correctSignature);
             done(null, User);
@@ -199,9 +207,11 @@ describe('feathers-authentication-publickey', () => {
         app.configure(publicKey({ Verifier: CustomVerifier }));
         app.setup();
 
-        return app.authenticate('publicKey')(req).then(result => {
-          expect(result.data.user).to.deep.equal(User);
-        });
+        return app
+          .authenticate('publicKey')(req)
+          .then(result => {
+            expect(result.data.user).to.deep.equal(User);
+          });
       });
     });
   });

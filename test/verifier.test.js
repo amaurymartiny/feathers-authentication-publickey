@@ -13,18 +13,19 @@ describe('Verifier', () => {
   let options;
   let verifier;
   let user;
-  // Message '100' signed by 0x0b664ebf14e204cde96690461830e0dd5dfb22aa: web3.eth.sign('0x0b664ebf14e204cde96690461830e0dd5dfb22aa', '100');
-  const correctSignature = '0x5909004173042d7b42a110c1f3325b704ca6361fc29698051955c7b002af5ffd2bcb379cc58ca331606dfed5d78f08651e20efa763e00ad9ba80a7c3397a16a81b';
+  // Message '100' signed by 0x0b664ebf14e204cde96690461830e0dd5dfb22aa: web3.personal.sign('0x0b664ebf14e204cde96690461830e0dd5dfb22aa', '100');
+  const correctSignature =
+    '0x44f4a9195e3df7bdd323640098d976b194e6bfb834b3b1c51a4142d5b185463653f781fb2a836fa738f8ce554eaa5a222193063375728fc6424443d8bcae6c4b1c';
 
   beforeEach(() => {
     app = feathers();
 
     service = {
       id: 'id',
-      find () {}
+      find() {}
     };
 
-    sinon.stub(service, 'find').callsFake(function (params) {
+    sinon.stub(service, 'find').callsFake(function(params) {
       return new Promise((resolve, reject) => {
         const { id, email } = params && params.query;
         if (id === 1 || email === 'admin@feathersjs.com') {
@@ -40,7 +41,8 @@ describe('Verifier', () => {
       publicKey: '0x0b664ebf14e204cde96690461830e0dd5dfb22aa'
     };
 
-    app.use('/users', service)
+    app
+      .use('/users', service)
       .configure(authentication({ secret: 'supersecret' }));
 
     options = Object.assign({}, defaults, app.get('authentication'));
@@ -86,7 +88,9 @@ describe('Verifier', () => {
       it('returns an error', () => {
         return verifier._verifySignature({}).catch(error => {
           expect(error).to.not.equal(undefined);
-          expect(error.message).to.equal("'user' record in the database is missing a 'nonce' field");
+          expect(error.message).to.equal(
+            "'user' record in the database is missing a 'nonce' field"
+          );
         });
       });
     });
@@ -95,7 +99,9 @@ describe('Verifier', () => {
       it('returns an error', () => {
         return verifier._verifySignature({ nonce: 100 }).catch(error => {
           expect(error).to.not.equal(undefined);
-          expect(error.message).to.equal("'user' record in the database is missing a 'publicKey' field");
+          expect(error.message).to.equal(
+            "'user' record in the database is missing a 'publicKey' field"
+          );
         });
       });
     });
@@ -114,21 +120,28 @@ describe('Verifier', () => {
 
     describe('when signature/publicKey combination is wrong', () => {
       it('rejects with with a 401 error', () => {
-        return verifier._verifySignature(Object.assign({}, user, { publicKey: '0x123' }), correctSignature).catch(error => {
-          expect(error).to.include({
-            name: 'NotAuthenticated',
-            code: 401,
-            message: 'Signature verification failed'
+        return verifier
+          ._verifySignature(
+            Object.assign({}, user, { publicKey: '0x123' }),
+            correctSignature
+          )
+          .catch(error => {
+            expect(error).to.include({
+              name: 'NotAuthenticated',
+              code: 401,
+              message: 'Signature verification failed'
+            });
           });
-        });
       });
     });
 
     describe('when signature verification succeeds', () => {
       it('returns the entity', () => {
-        return verifier._verifySignature(user, correctSignature).then(result => {
-          expect(result).to.deep.equal(user);
-        });
+        return verifier
+          ._verifySignature(user, correctSignature)
+          .then(result => {
+            expect(result).to.deep.equal(user);
+          });
       });
     });
   });
@@ -202,11 +215,16 @@ describe('Verifier', () => {
 
       user.email = 'admin@feathersjs.com';
 
-      verifier.verify({}, 'admin@feathersjs.com', correctSignature, (error, entity) => {
-        expect(error).to.equal(null);
-        expect(entity).to.deep.equal(user);
-        done();
-      });
+      verifier.verify(
+        {},
+        'admin@feathersjs.com',
+        correctSignature,
+        (error, entity) => {
+          expect(error).to.equal(null);
+          expect(entity).to.deep.equal(user);
+          done();
+        }
+      );
     });
 
     it('calls _normalizeResult', done => {
@@ -243,7 +261,7 @@ describe('Verifier', () => {
       });
     });
 
-    it('handles false rejections in promise chain', (done) => {
+    it('handles false rejections in promise chain', done => {
       verifier._normalizeResult = () => Promise.reject(false); // eslint-disable-line
       verifier.verify({}, user.email, 'admin', (error, entity) => {
         expect(error).to.equal(null);
@@ -252,7 +270,7 @@ describe('Verifier', () => {
       });
     });
 
-    it('returns errors', (done) => {
+    it('returns errors', done => {
       const authError = new Error('An error');
       verifier._normalizeResult = () => Promise.reject(authError);
       verifier.verify({}, user.email, 'admin', (error, entity) => {
@@ -263,16 +281,16 @@ describe('Verifier', () => {
     });
   });
 
-  describe('Verifier without service.id', function () {
+  describe('Verifier without service.id', function() {
     before(() => {
       service = {
-        find () {}
+        find() {}
       };
     });
   });
 });
 
-describe('Verifier without service.id', function () {
+describe('Verifier without service.id', function() {
   let service;
   let app;
   let options;
@@ -282,10 +300,11 @@ describe('Verifier without service.id', function () {
     app = feathers();
 
     service = {
-      find () {}
+      find() {}
     };
 
-    app.use('/users', service)
+    app
+      .use('/users', service)
       .configure(authentication({ secret: 'supersecret' }));
 
     options = Object.assign({}, defaults, app.get('authentication'));
@@ -295,7 +314,9 @@ describe('Verifier without service.id', function () {
 
   it('throws an error when service.id is not set', done => {
     verifier.verify({}, 'fakeId', 'fakeSignature', (error, entity) => {
-      expect(error.message.includes('the `id` property must be set')).to.equal(true);
+      expect(error.message.includes('the `id` property must be set')).to.equal(
+        true
+      );
       expect(entity).to.equal(undefined);
       done();
     });
